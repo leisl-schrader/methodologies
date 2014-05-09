@@ -44,11 +44,13 @@ unique and non-global components; uses classes, and --modifier as needed to twea
 
 Element Rules
 ----
-The smallest individual parts of a module. These rules let us keep class names short so we don't have to keep sub-modularizing and keep on extending the class name. They are not meant to be reusable outside that module; since names which may not be unique, they must be scoped to that specific module.
+The smallest individual parts of a module. These rules let us keep class names short so we don't have to keep sub-modularizing and keep on 
+extending the class name. They are not meant to be reusable outside that module; since they have names which may not be unique, they must be scoped to that specific module.
 
 State Rules
 ---
-Typically indicates a change in style in response to user actions. Always begins with "is-". These classes are added to existing elements, and thus are nested, scoped to the elements they modify (via parent selector).
+Typically indicates a change in style in response to user actions. Always begins with "is-". 
+These classes are added to existing elements, and thus are nested, scoped to the elements they modify (via parent selector).
 
 Can also be used as a modifier, similar to above, in cases where extends would be problematic for selecting the element with JS.
 
@@ -208,6 +210,7 @@ home
 featured  
 callout  
 content  
+description
 nav / menu  
 error  
 container / wrapper  
@@ -224,7 +227,7 @@ any increment number
 any date or time reference  
 text / info / box / style / anything too vague  
 
-\*(unless also a good descriptor - header, footer, article etc)
+\*(unless also a good descriptor - header, footer, article, label etc)
 
 *Good:* `.p-productList`   *Bad*: `.p-productUL`
 
@@ -309,7 +312,7 @@ in template-productDetail.scss: `#template-productDetail .myModule`
 ### Scoping for sprints ###
 
 One technique for avoiding the usual conflicts with a content management sytem's content is to add a class specific to the team and sprint to 
-the body tag, in which to temporarily place styles that need to overwrite the cMS. It should give our work a higher cascade order when paired with 
+the body tag, in which to temporarily place styles that need to overwrite the CMS. It should give our work a higher cascade order when paired with 
 the template scope.
 
 HTML: `body id="template-productDetail" class="team01-sprint09"`
@@ -425,7 +428,7 @@ discuss this with everyone first.
 Further Reading
 ====
 
-[Prototype illustrating this methodology](https://github.com/leisl-schrader/codeSamples/tree/master/cssmethodology).
+[Prototype illustrating this methodology](https://github.com/leisl-schrader/codeSamples/tree/master/cssmethodology)
 
 [SMACSS](http://smacss.com/)
 
