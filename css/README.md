@@ -215,29 +215,29 @@ primary / secondary / tertiary
 
 Unsemantic terms:
 ---
-blue / red / any color
-left / right / top / bottom / sidebar / any indicator of position
-small / medium / large / any descriptor of size
-bold / italic / margin / spacing / any descriptor of style / anything which is also a CSS property
-anything which is also an HTML element *
-any increment number
-any date or time reference
-text / info / box / style / anything too vague
+blue / red / any color  
+left / right / top / bottom / sidebar / any indicator of position  
+small / medium / large / any descriptor of size  
+bold / italic / margin / spacing / any descriptor of style / anything which is also a CSS property  
+anything which is also an HTML element \*  
+any increment number  
+any date or time reference  
+text / info / box / style / anything too vague  
 
-\*(unless also a general semantic descriptor)
+\*(unless also a good descriptor - header, footer, article etc)
 
-*Good:* `.p-productList` / *Bad*: `.p-productUL`
+*Good:* `.p-productList`   *Bad*: `.p-productUL`
 
-*Good:* `.m-productDetail-subheading` / *Bad:* `.m-productDetail-H2`
+*Good:* `.m-productDetail-subheading`   *Bad:* `.m-productDetail-H2`
 
-*Good:* `.m-productDetail-description` / *Bad:* `.m-productDetail-paragraph`
+*Good:* `.m-productDetail-description`   *Bad:* `.m-productDetail-paragraph`
   
 
 ### Other too-specific or non-modular terms to be avoided: ###
 
 banner (what if we redesigned it to a square instead? Try "feature," "promotion", something that describes it purpose)
 
-popup (what if we changed formats, and this were in-page instead of a popup? try "warning," "notification", something that describes it purpose)
+popup (what if we changed formats, and this were in-page instead of a popup? try "warning," "notification", "confirmation", something that describes it purpose)
 
 endeca / certona / jQuery / fancybox / any vendor or plugin that we might someday dump
 
@@ -246,19 +246,19 @@ any abbreviation or shortened word that isn't extremely obvious
   
 One trick is to use verbs, to understand the purpose by what it "does". This also makes for easy mapping of an element and its JS function.
 
-### Common Action Verbs: ### 
+#### Common Action Verbs
 
-	show
-	hide
-	rotate
-	move
-	showNext
-	showPrev
-	focus
-	disable
-	calculate
+show  
+hide  
+rotate  
+move  
+showNext  
+showPrev  
+focus  
+disable  
+calculate  
 
-### Examples ### 
+#### Examples  
 	.m-productList-showQuickView
 
 
@@ -268,7 +268,9 @@ Rec 5: Use Scoping Techniques Properly
 Root level scoping
 ----
 
-Our starter template includes code from the HTML5Boilerplate which will add a class to the root html element based on the current version of IE. This is our chosen method for adding IE specific styles. (An IE specific CSS file may also be conditionally loaded in.)
+Our starter template includes the [conditional classes technique](http://www.paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/) which will add a class to the root html element based on the current version of IE. This is our chosen method for adding IE specific styles.
+
+These styles would be placed at the bottom of a module/pattern's file. 
 
 	.lt-ie8 .myModule { 
 		/* Modifications to spacing, position, etc based on IE8 quirks */ 
@@ -278,13 +280,15 @@ Our starter template includes code from the HTML5Boilerplate which will add a cl
 		/* A fallback for a CSS3 feature not natively supported */ 
 	}
 
+An conditionally loaded IE-only CSS file would not be used.
+
 Modernizr has a similar feature which adds whether or not certain HTML5/CSS3/other new features are supported in the current browser, usable by CSS or JS.
 
 	.no-flexbox .myModule { 
 		/* an alternative non-flexbox layout */ 
 	}
 
-	$('.canvas .myModule').click(function(){
+	$('.canvas .myModule').on('click', function(){
 		/* code to be used only if canvas is supported */
 	});
 
@@ -295,7 +299,7 @@ Eliminate the use of IE "hacks" such as the asterisk hack, underscore hack, etc.
 
 Though we aim to make our code as modular as possible and reusable globally, sometimes certain contexts need special overrides. A good method is to use template scoping to compartmentalize those exceptions to the rules. Thus, any page with its own template Sass file should also have an ID attached to the body tag with the same name. The CSS for this should be placed with the template Sass file, NOT the module Sass file.
 
-These should be put in place regardless of whether they are in use at first development, so that in the future those exceptions are easy to add.
+These IDs should be put in place regardless of whether they are in use at first development, so that in the future those exceptions are easy to add.
 
 HTML: `body id="template-productDetail"`
 
@@ -304,11 +308,13 @@ in template-productDetail.scss: `#template-productDetail .myModule`
 
 ### Scoping for sprints ###
 
-One technique for avoiding the usual conflicts with a content management sytem's content is to add a class specific to the team and sprint to the body tag, in which to temporarily place styles that need to overwrite CHM. It should give our work a higher cascade order when paired with the template scope.
+One technique for avoiding the usual conflicts with a content management sytem's content is to add a class specific to the team and sprint to 
+the body tag, in which to temporarily place styles that need to overwrite the cMS. It should give our work a higher cascade order when paired with 
+the template scope.
 
-HTML: body id="template-productDetail" class="team01-sprint09"
+HTML: `body id="template-productDetail" class="team01-sprint09"`
 
-CSS: #template-productDetail.team01-sprint09
+CSS: `#template-productDetail.team01-sprint09`
 
 These must not go into production and should be removed from HTML and CSS before release.
 
@@ -319,7 +325,7 @@ Rec 6: Format Clearly
 Comments
 ----
 
-Besides generally commenting as profusely as you can, label each module or pattern like so:
+Besides generally commenting inline as much as you can, label the top of each each module or pattern file like so:
 
 	/* modules / colorSwatchMenu
 	*
@@ -348,60 +354,72 @@ Example:
 		width: #{$width-thumbnail--xlarge}px;
 		
 		.m-productThumbnail-image {
-		height: #{$height-thumbnail--xlarge}px;	
+		height: #{$height-thumbnail--xlarge}px;
+			
 			img {
 				max-height: #{$height-thumbnail--xlarge}px;
 			}
 		}
 	}
 
-Add a blank line after every non-nested ruleset. Add a newline after every property. Do not try to compress your source files (such as Sass files) for whitespace; make them as readable as possible. Compression can be done at compile time.
+Add a blank line after every nested *and* non-nested ruleset (anything wrapped in curly braces). Add a newline after every property. Do not try to compress your source files (such as Sass files) for whitespace; make them as readable as possible. Compression can be done at compile time.
 
 
 Alphabetical Order
 ----
 
-Whithin a ruleset, I recommend placing Sass "@extend"s first, followed by "@include"s, then all other CSS properties in alphabetical order. Example:
+Whithin a ruleset, I recommend placing Sass `@extend`s first, followed by `@include`s, then all other CSS properties in alphabetical order. Example:
 
 	.m-quickView-link {
-		@include border-radius(5px);
-		background-color: #E5E7E8;
-		border: 1px solid #646464;
-		bottom: 10px; 
-		color: #646464;
+		@extend .p-cta;
+		@include border-radius(0.5em);
+		background-color: $color-secondary-bg;
+		border: $width-default-border solid $color-default-border;
+		bottom: 0.5em; 
+		color: $color-default-text;
 		cursor: pointer;
 		display: none;
-		height: 24px;
+		height: 2em;
 		font-family: Verdana, Geneva, sans-serif;
 		font-size: #{$width-thumbnail / $quickView-fontSizeAdjustment}em;
 		left: 50%;
 		line-height: 100%;
-		margin-left: -44px;
-		padding: 4px;
+		margin-left: -2em;
+		padding: 0.5em;
 		position: absolute;
 		text-decoration: none;
-		width: 88px;
+		width: 4em;
 		z-index: 999;
 	}
 
-Even though this does separate rules which logically work together, I've found that all other methods of ordering are so subjective and prone to different interpretations, that this highly objective method is the most orderly. Firebug and Chrome Tools also display properties this way by default, making copying changes made there into your code easier.
+Even though this does separate rules which logically work together (such as position / top / left), I've found that all other methods of ordering are so subjective and prone to different interpretations, that this highly objective method is the most orderly. Firebug and Chrome Tools also display properties this way by default, making copying changes made there into your code easier.
 
 Other Recommendations
 ---- 
 
-- Minimize the use of element selectors(#l-header ul) or qualifying a selector with an element type (#l-header ul.m-navigation). Instead, create semantic selectors that can be used on any element, in the event of a redesign (#l-header .m-navigation). If what you want to style is part of an existing module, try creating an element rule (#l-header .m-navigation .e-link).   
-If you have too many elements that you just can't imagine adding a class to each one, run it by your team before you do something like (#l-header .m-navigation a) and COMMENT about it. A common case for an exception is for navigation menus that can contain dozens of li or a elements, or p tags in a long page of text. 
+- Very strictly minimize the use of element selectors(`.m-navigation ul`) or qualifying a selector with an element type (`.m-navigation ul.m-navigation-categories`). 
+Instead, create semantic selectors that can be used on any element, in the event of a redesign (`.m-navigation .m-navigation-categories`). 
+If what you want to style is part of an existing module, try creating an element rule (`.m-navigation .e-link`, `.m-navigation .e-category`).   
+If you have too many elements that you just can't imagine adding a class to each one, run it by your team before you do something 
+like (`.m-navigation a`) and COMMENT about it. 
+A common case for an exception is for navigation menus that can contain dozens of li or a elements, or p elements in a long page of text. 
   
-- Limit to 3 levels of nesting in Sass; nest only content that is exclusively related, such as element rules, that can't possibly exist outside the container. If you have no more nesting levels left, try to submodularize (.m-module-subModule) and scope to that instead. Or, start a whole new module from a smaller portion of the larger module.   
-Don't explicitly nest inside a wrapper unless you have to; remember that we're not trying to mimic HTML structure in CSS. (.m-mySwatchModule .e-swatch works better than .m-mySwatchModule .m-mySwatchModule-swatchWrapper .e-swatch) 
+- Limit to 3 levels of nesting in Sass; nest only content that is exclusively related, such as element rules, that can't possibly exist outside the container. 
+If you have no more nesting levels left, try to submodularize (`.m-module-subModule`) and scope to that instead. Start a whole new module from a smaller portion of the larger module.   
+Don't explicitly nest inside a wrapper unless you have to; remember that we're not trying to mimic HTML structure in CSS. 
+`.m-mySwatchModule .e-swatch` works better than `.m-mySwatchModule .m-mySwatchModule-swatchWrapper .e-swatch`. 
 
 - When in doubt when creating new selector names, ask your teammates if it makes sense. 
   
-- If you'd like to create a new Sass file for a new module or pattern that you're writing, note this to your team. Follow the existing format as far as commenting, whitespace, etc. In the rare event that you're creating an all new template, and you'd need a new template Sass file, discuss this with everyone first. 
+- If you'd like to create a new Sass file for a new module or pattern that you're writing, note this to your team. Follow the existing format as 
+far as commenting, whitespace, etc. In the rare event that you're creating an all new template, and you'd need a new template Sass file, 
+discuss this with everyone first. 
   
-- If you need to write a media query specific style, place it inline with the rest of the rules, as if it were just another property (or as close to the default rules as you can). There will be no separate media-query-only or per-breakpoint file. Use the Sass Breakpoint plugin. 
+- If you need to write a media query specific style, place it inline with the rest of the rules, as if it were just another property 
+(or as close to the default rules as you can). There will be no separate media-query-only or per-breakpoint file. Use the Sass Breakpoint plugin. 
   
-- Above all, the methodology should make intuitive sense for all current and future developers. Write it with pride, so that you don't have to be "that person" that everyone shakes their head at when they read your code in five years. 
+- Above all, the methodology should make intuitive sense for all current and future developers. Write it with pride, so that you don't have to be 
+"that person" that everyone shakes their head at when they read your code in two years. 
   
 
 Further Reading
