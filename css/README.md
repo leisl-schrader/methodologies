@@ -238,18 +238,18 @@ One trick is to use verbs, to understand the purpose by what it "does". This als
 
 ### Common Action Verbs: ### 
 
-show
-hide
-rotate
-move
-showNext
-showPrev
-focus
-disable
-calculate
+	show
+	hide
+	rotate
+	move
+	showNext
+	showPrev
+	focus
+	disable
+	calculate
 
 ### Examples ### 
-.m-productList-showQuickView
+	.m-productList-showQuickView
 
 
 Recommendation 5: Scoping Techniques
@@ -259,7 +259,6 @@ Root level scoping
 ----
 
 Our starter template includes code from the HTML5Boilerplate which will add a class to the root html element based on the current version of IE. This is our chosen method for adding IE specific styles. (An IE specific CSS file may also be conditionally loaded in.)
-  
 
 	.lt-ie8 .myModule { 
 		/* Modifications to spacing, position, etc based on IE8 quirks */ 
@@ -271,220 +270,135 @@ Our starter template includes code from the HTML5Boilerplate which will add a cl
 
 Modernizr has a similar feature which adds whether or not certain HTML5/CSS3/other new features are supported in the current browser, usable by CSS or JS.
 
-  
+	.no-flexbox .myModule { 
+		/* an alternative non-flexbox layout */ 
+	}
 
-.no-flexbox .myModule { 
+	$('.canvas .myModule').click(function(){
+		/* code to be used only if canvas is supported */
+	});
 
-/* an alternative non-flexbox layout */ 
-
-}
-
-  
-
-$('.canvas .myModule').click(function(){
-
-/* code to be used only if canvas is supported */
-
-});
-
-  
-
-Eliminate the use of IE "hacks" such as the asterisk hack, underscore hack, etc. (*+html .m-module, _html .m-module) These are not forward compatible, are unclear, and don't play nice with preprocessors.
-
+Eliminate the use of IE "hacks" such as the asterisk hack, underscore hack, etc. (`*+html .m-module, _html .m-module`) These are not forward compatible, are unclear, and don't play nice with preprocessors.  
   
   
-
-Template scoping
-
-  
+### Template scoping ###
 
 Though we aim to make our code as modular as possible and reusable globally, sometimes certain contexts need special overrides. A good method is to use template scoping to compartmentalize those exceptions to the rules. Thus, any page with its own template Sass file should also have an ID attached to the body tag with the same name. The CSS for this should be placed with the template Sass file, NOT the module Sass file.
 
-  
-
 These should be put in place regardless of whether they are in use at first development, so that in the future those exceptions are easy to add.
 
+HTML: `body id="template-productDetail"`
+
+in template-productDetail.scss: `#template-productDetail .myModule`
   
 
-HTML: body id="template-productDetail"
+### Scoping for sprints ###
 
-in template-productDetail.scss: #template-productDetail .myModule
-
-  
-  
-
-Scoping for sprints
-
-One technique for avoiding the usual conflicts with CHM is to add a class specific to the team and sprint to the body tag, in which to temporarily place styles that need to overwrite CHM. It should give our work a higher cascade order when paired with the template scope.
-
-  
+One technique for avoiding the usual conflicts with a content management sytem's content is to add a class specific to the team and sprint to the body tag, in which to temporarily place styles that need to overwrite CHM. It should give our work a higher cascade order when paired with the template scope.
 
 HTML: body id="template-productDetail" class="team01-sprint09"
 
 CSS: #template-productDetail.team01-sprint09
 
-  
-
 These must not go into production and should be removed from HTML and CSS before release.
 
   
-
 Recommendation 6: Formatting
-
-  
+====
 
 Comments
+----
 
 Besides generally commenting as profusely as you can, label each module or pattern like so:
 
-  
-
-/* modules / colorSwatchMenu
-
-*
-
-* Shows a menu on list pages to view available colors.
-
-*
-
-*/
-
-  
-
-/* patterns / verticalCenter
-
-*
-
-* Vertically center a child element inside its parent
-
-*
-
-*/
-
-  
+	/* modules / colorSwatchMenu
+	*
+	* Shows a menu on list pages to view available colors.
+	*
+	*/ 
+	
+	/* patterns / verticalCenter
+	*
+	* Vertically center a child element inside its parent
+	*
+	*/ 
 
 Remember that in Sass, double-slash style comments do not get compiled, so they are good for technical comments meant for other devs, TODOs, etc. Slash-star comments do get compiled, so they are good for labelling modules, explaining the purpose of something, or other items you'd like for the design team to see.
 
-  
 
 Whitespace
+----
 
-  
+No matter your IDE/editor, set it to use "soft tabs" (spaces) for indentation. Set your "tab" size to be four spaces. Tab before all properties in a ruleset, and on any nested rulesets. 
 
-No matter your IDE/editor, set it to use "soft tabs" (spaces) for indentation. Set your "tab" size to be four spaces. Tab before all properties in a ruleset, and on any nested rulesets. Example (not exact because it’s a Google Doc):
+Example:
 
-  
-
-.m-productThumbnail--xlarge {
-
-@extend .m-productThumbnail;
-
-width: #{$width-thumbnail--xlarge}px;
-
-  
-
-.m-productThumbnail-image {
-
-height: #{$height-thumbnail--xlarge}px;
-
-img {
-
-max-height: #{$height-thumbnail--xlarge}px;
-
-}
-
-}
-
-}
-
-  
+	.m-productThumbnail--xlarge {
+		@extend .m-productThumbnail;	
+		width: #{$width-thumbnail--xlarge}px;
+		
+		.m-productThumbnail-image {
+		height: #{$height-thumbnail--xlarge}px;	
+			img {
+				max-height: #{$height-thumbnail--xlarge}px;
+			}
+		}
+	}
 
 Add a blank line after every non-nested ruleset. Add a newline after every property. Do not try to compress your source files (such as Sass files) for whitespace; make them as readable as possible. Compression can be done at compile time.
 
-  
 
 Alphabetical Order
-
-  
+----
 
 Whithin a ruleset, I recommend placing Sass "@extend"s first, followed by "@include"s, then all other CSS properties in alphabetical order. Example:
 
-  
-
-.m-quickView-link {
-
-@include border-radius(5px);
-
-background-color: #E5E7E8;
-
-border: 1px solid #646464;
-
-bottom: 10px; 
-
-color: #646464;
-
-cursor: pointer;
-
-display: none;
-
-height: 24px;
-
-font-family: Verdana, Geneva, sans-serif;
-
-font-size: #{$width-thumbnail / $quickView-fontSizeAdjustment}em;
-
-left: 50%;
-
-line-height: 100%;
-
-margin-left: -44px;
-
-padding: 4px;
-
-position: absolute;
-
-text-decoration: none;
-
-width: 88px;
-
-z-index: 999;
-
-}
-
-  
+	.m-quickView-link {
+		@include border-radius(5px);
+		background-color: #E5E7E8;
+		border: 1px solid #646464;
+		bottom: 10px; 
+		color: #646464;
+		cursor: pointer;
+		display: none;
+		height: 24px;
+		font-family: Verdana, Geneva, sans-serif;
+		font-size: #{$width-thumbnail / $quickView-fontSizeAdjustment}em;
+		left: 50%;
+		line-height: 100%;
+		margin-left: -44px;
+		padding: 4px;
+		position: absolute;
+		text-decoration: none;
+		width: 88px;
+		z-index: 999;
+	}
 
 Even though this does separate rules which logically work together, I've found that all other methods of ordering are so subjective and prone to different interpretations, that this highly objective method is the most orderly. Firebug and Chrome Tools also display properties this way by default, making copying changes made there into your code easier.
 
-  
-
 Other Recommendations
-
-  
+---- 
 
 - Minimize the use of element selectors(#l-header ul) or qualifying a selector with an element type (#l-header ul.m-navigation). Instead, create semantic selectors that can be used on any element, in the event of a redesign (#l-header .m-navigation). If what you want to style is part of an existing module, try creating an element rule (#l-header .m-navigation .e-link).   
 If you have too many elements that you just can't imagine adding a class to each one, run it by your team before you do something like (#l-header .m-navigation a) and COMMENT about it. A common case for an exception is for navigation menus that can contain dozens of li or a elements, or p tags in a long page of text. 
   
-
 - Limit to 3 levels of nesting in Sass; nest only content that is exclusively related, such as element rules, that can't possibly exist outside the container. If you have no more nesting levels left, try to submodularize (.m-module-subModule) and scope to that instead. Or, start a whole new module from a smaller portion of the larger module.   
 Don't explicitly nest inside a wrapper unless you have to; remember that we're not trying to mimic HTML structure in CSS. (.m-mySwatchModule .e-swatch works better than .m-mySwatchModule .m-mySwatchModule-swatchWrapper .e-swatch) 
-  
 
 - When in doubt when creating new selector names, ask your teammates if it makes sense. 
   
-
 - If you'd like to create a new Sass file for a new module or pattern that you're writing, note this to your team. Follow the existing format as far as commenting, whitespace, etc. In the rare event that you're creating an all new template, and you'd need a new template Sass file, discuss this with everyone first. 
   
-
 - If you need to write a media query specific style, place it inline with the rest of the rules, as if it were just another property (or as close to the default rules as you can). There will be no separate media-query-only or per-breakpoint file. Use the Sass Breakpoint plugin. 
   
-
 - Above all, the methodology should make intuitive sense for all current and future developers. Write it with pride, so that you don't have to be "that person" that everyone shakes their head at when they read your code in five years. 
   
 
 Further Reading
+====
 
-[http://smacss.com/](http://smacss.com/)
+[SMACSS](http://smacss.com/)
 
-[http://bem.info/method/](http://bem.info/method/)
+[BEM](http://bem.info/method/)
 
-[http://alchemyindesign.com/notes/2012/10/03/smacss-notes-on-usage.html](http://alchemyindesign.com/notes/2012/10/03/smacss-notes-on-usage.html)
+[SMACSS Notes on Usage](http://alchemyindesign.com/notes/2012/10/03/smacss-notes-on-usage.html)
