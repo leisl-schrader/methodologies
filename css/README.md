@@ -1,22 +1,30 @@
-This document outlines a recommendation for developing in CSS for UI developers. The recommendation is based on SMACSS and BEM. 
+CSS (and Sass) Methodology
+=============
+###### by Leisl Schrader - Remix Design ######
+
+
+This document outlines a recommendation for developing in CSS for front-end / UI developers. The recommendation is largely, though not entirely, based on [SMACSS](http://smacss.com/) and [BEM](http://bem.info/method/). 
 
 SMACSS is a design pattern/methodology for CSS, and stands for Scalable and Modular Architecture for CSS. It lets you increase the semantics and modularity of your CSS by categorizing rules into distinct sets. 
 
 BEM is a naming convention methodology in the same vein, and stands for Block-Element-Modifier.
 
+You can also view a [prototype illustrating this methodology](https://github.com/leisl-schrader/codeSamples/tree/master/cssmethodology).
+
 
 Definitions
 ----
 
-*Semantics*: Make the HTML and CSS meaningful and clear based on its content and purpose
+*Semantics*: Make the HTML and CSS meaningful and clear based on its content and purpose.
 
 *Modularity*: Decrease the expectation of a specific HTML structure. A module should be able to move and live on any part of any page.
 
   
 
-Recommendation 1: Categorize All CSS Rules by Type
+Rec 1: Categorize All CSS Rules by Type
 ====
   
+All CSS rules must fit into one of these six types.
 
 Base Rules
 ----
@@ -38,7 +46,6 @@ Element Rules
 ----
 The smallest individual parts of a module. These rules let us keep class names short so we don't have to keep sub-modularizing and keep on extending the class name. They are not meant to be reusable outside that module; since names which may not be unique, they must be scoped to that specific module.
 
-
 State Rules
 ---
 Typically indicates a change in style in response to user actions. Always begins with "is-". These classes are added to existing elements, and thus are nested, scoped to the elements they modify (via parent selector).
@@ -46,9 +53,10 @@ Typically indicates a change in style in response to user actions. Always begins
 Can also be used as a modifier, similar to above, in cases where extends would be problematic for selecting the element with JS.
 
 
-Recommendation 2: Name All CSS Selectors by Type
+Rec 2: Name All CSS Selectors by Type
 ====
   
+Use a single lowercase letter and dash prefix for each ID and class name.
 
 Layout:
 ----
@@ -117,18 +125,20 @@ Here is list of common abbreviations that we've agreed on, but is by no means co
 (I'm not a fan of "prod" because it could mean "production")
 
 
-Recommendation 3: Organize All CSS Rules in Separate Files by Type
+Rec 3: Organize All CSS Rules in Separate Files by Type
 ====
 
-With a the use of a CSS preprocessor such as Sass, all base rules would be kept in a single file, or directory of files if further splitting is desired; same with and layout rules.
+With a the use of a CSS preprocessor such as Sass, all base rules would be kept in a single file, or directory of files if further splitting is desired; same with layout rules.
 
-Pattern rules would be in a separate file for each pattern, to be included as needed. Same with module rules + associated state rules.
+Pattern rules would be in a separate file for each pattern, to be included as needed. Module rules would also be kept in a separate file each, though submodule and associated state rules should be kept in the same file as their module.
 
 ### Using @extend for modifiers ###
 
-Placing "@extend .myFirstSelector" in a ruleset for ".mySecondSelector" will apply all the styles of .myFirstSelector to .mySecondSelector. Afterwards, you can place any different or overriding styles for .mySecondSelector. In the past, one would have to maintain a long list of comma-grouped selectors to accomplish this. In the compiled CSS, both selectors will automatically be comma grouped as such (along with any other other selectors which also extend the same thing.)
+Placing `@extend .myFirstSelector` in a ruleset for `.mySecondSelector` will apply all the styles of `.myFirstSelector` to `.mySecondSelector`. Afterwards, you can place any different or overriding styles for `.mySecondSelector`. 
 
-A perfect use for this is for modifiers. When creating any kind of rule which is a special-case instance of another rule, and we want to use the --modifier naming convention, we can write styles like this:
+In the past, one would have to maintain a long list of comma-grouped selectors to accomplish this. In the compiled CSS, both selectors will automatically be comma grouped as such (along with any other other selectors which also extend the same thing).
+
+A perfect use for this is for modifiers. When creating any kind of rule which is a special-case instance of another rule, and we want to use the `--modifier` naming convention, we can write styles like this:
 
 	.myModule {
 		font-weight: bold;
@@ -140,7 +150,7 @@ A perfect use for this is for modifiers. When creating any kind of rule which is
 		text-transform: uppercase;
 	}
 
-In our HTML, we only need to apply the class `.myModule--specialCase.` This way, we don't need to add multiple classes to achieve modularity.
+In our HTML, we only need to apply the class `.myModule--specialCase`. This way, we don't need to add multiple classes to achieve modularity.
 
 ### Using @extend for pattern rules ###
 
@@ -185,23 +195,23 @@ Currently, I think this can also be used similarly to a modifier, not just in re
 It seemed like a best practice in SMACSS to use the `--modifier` approach, and have a single class name rather than adding a class name. However, I don't know how solve that JS issue; we'd have to enforce using `[class^='e-option']` instead. The jury's still out, and the rec is always evolving.
 
 
-Recommendation 4: Name CSS Selectors Semantically
+Rec 4: Name CSS Selectors Semantically
 ====
   
-Key to a strong design pattern and convention is semantics: Naming things for what they are and what their purpose is, not what they look like and where they are located. Purpose generally, will never change; everything else is subject to change. We want to make names permanent and modular.
+Key to a strong design pattern and convention is semantics: Naming things for what they are and what their purpose is, not what they look like and where they are located. Purpose generally, will never change; everything else is subject to change. We want to make names permanent and inherently understandable without context.
 
 Good semantic terms:
 ----
-main
-global
-home
-featured
-callout
-content
-nav / menu
-error
-container / wrapper
-primary / secondary / tertiary  
+main  
+global  
+home  
+featured  
+callout  
+content  
+nav / menu  
+error  
+container / wrapper  
+primary / secondary / tertiary   
 
 Unsemantic terms:
 ---
@@ -252,7 +262,7 @@ One trick is to use verbs, to understand the purpose by what it "does". This als
 	.m-productList-showQuickView
 
 
-Recommendation 5: Scoping Techniques
+Rec 5: Use Scoping Techniques Properly
 ====
   
 Root level scoping
@@ -303,7 +313,7 @@ CSS: #template-productDetail.team01-sprint09
 These must not go into production and should be removed from HTML and CSS before release.
 
   
-Recommendation 6: Formatting
+Rec 6: Format Clearly
 ====
 
 Comments
@@ -396,6 +406,8 @@ Don't explicitly nest inside a wrapper unless you have to; remember that we're n
 
 Further Reading
 ====
+
+[Prototype illustrating this methodology](https://github.com/leisl-schrader/codeSamples/tree/master/cssmethodology).
 
 [SMACSS](http://smacss.com/)
 
